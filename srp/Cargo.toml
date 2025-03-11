@@ -1,0 +1,16 @@
+[package]
+name = "srp"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+subtle = { version = "*", default-features = false }
+digest = { version = "*", default-features = false }
+crypto-bigint = { version = "*", default-features = false }
+argon2 = "0.5.3"
+blake2 = { version = "0.10.6", default-features = false }
+
+[dev-dependencies]
+sha2 = "*"
+rand = "*"
+argon2 = { version = "*" }

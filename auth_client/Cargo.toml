@@ -1,0 +1,25 @@
+[package]
+name = "auth"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+auth_common = { path = "../auth_common" }
+srp = { path = "../srp" }
+wasm-bindgen = "*"
+js-sys = "*"
+argon2 = "0.5.3"
+blake2 = { version = "0.10.6", default-features = false }
+wee_alloc = { version = "*", default-features = false }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+lto = true
+opt-level = 'z'
+codegen-units = 1
+
+[package.metadata.wasm-pack.profile.release]
+#wasm-opt = ['-O0', '-g']
+wasm-opt = ['-O2']

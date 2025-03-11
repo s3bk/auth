@@ -1,0 +1,17 @@
+[package]
+name = "auth_server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+auth_common = { path = "../auth_common" }
+
+postcard = "*"
+serde = { version = "*", features = ["derive"] }
+rand = "*"
+srp = { path = "../srp" }
+blake2 = { version = "0.10.6", default-features = false }
+crypto-bigint = { version = "*", default-features=false, features=["serde"] }
+serdapt-base64 = "*"
+hashbrown = "*"
+gxhash = "*"

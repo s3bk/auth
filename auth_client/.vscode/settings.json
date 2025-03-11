@@ -1,0 +1,10 @@
+{
+    "rust-analyzer.cargo.allTargets": true,
+    "rust-analyzer.cachePriming.enable": false,
+    
+    "rust-analyzer.cargo.cfgs": [
+        "panic=abort",
+        "!panic=unwind"
+    ]
+    
+}

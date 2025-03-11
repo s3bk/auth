@@ -1,0 +1,14 @@
+[package]
+name = "auth_utils"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "*", features = ["derive"] }
+auth_common = { path = "../auth_common" }
+srp = { path = "../srp" }
+argon2 = "0.5.3"
+blake2 = { version = "0.10.6", default-features = false }
+base64 = "*"
+rand = "*"
+rpassword = "*"
