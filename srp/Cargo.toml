@@ -13,4 +13,3 @@ blake2 = { version = "0.10.6", default-features = false }
 [dev-dependencies]
 sha2 = "*"
 rand = "*"
-argon2 = { version = "*" }

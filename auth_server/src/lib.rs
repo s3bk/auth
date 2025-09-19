@@ -4,8 +4,9 @@ use blake2::Blake2b512;
 use gxhash::{GxBuildHasher, GxHasher, HashMap};
 use rand::{random, Rng, RngCore};
 use serde::{Deserialize, Serialize};
-use srp::{server::SrpServer4096, Encoding, Uint, U4096, SrpAuthError};
+use srp::{server::SrpServer4096, Encoding, Uint, U4096};
 use std::{hash::Hash, time::Instant};
+pub use srp::SrpAuthError;
 
 #[derive(Serialize, Deserialize)]
 pub struct UserData {
@@ -31,6 +32,11 @@ fn rand_num<const N: usize>() -> Uint<N> {
 pub struct SrpAuth<K: Eq + Hash + Clone, D> {
     logins: HashMap<(K, u64), Step1<D>>
 }
+impl<K: Eq + Hash + Clone, D> Default for SrpAuth<K, D> {
+    fn default() -> Self {
+        SrpAuth { logins: Default::default() }
+    }
+}
 
 pub struct Authenticated<D> {
     shared_key: U4096,
@@ -46,7 +52,7 @@ impl<K: Hash + Eq + Clone + Unpin, D: Unpin> SrpAuth<K, D> {
     pub fn new() -> Self {
         SrpAuth { logins: HashMap::with_hasher(GxBuildHasher::default()) }
     }
-    pub fn pre_auth(&mut self, req: PreAuthReq<'_>, user_data: &UserData, key1: K, data: D, expires: Instant) -> Result<PreAuthResp, ()> {
+    pub fn pre_auth(&mut self, req: PreAuthReq, user_data: &UserData, key1: K, data: D, expires: Instant) -> Result<PreAuthResp, ()> {
         let b = rand_num();
         let server = SrpServer4096::<Digest>::new(b);
 

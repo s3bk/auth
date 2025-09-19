@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use crypto_bigint::{Uint, Zero, U256, U4096};
+use crypto_bigint::{Uint, Zero, U4096};
 use digest::{Digest, Output};
 use subtle::ConstantTimeEq;
 
-use crate::groups::g_4096::{mod_n, ConstMontyModN, G_MOD_N};
+use crate::groups::g_4096::{mod_n, G_MOD_N};
 use crate::{SrpAuthError, DigestNum};
 use crate::utils::{compute_m1, compute_m2, mod4096};
 

@@ -40,6 +40,22 @@ impl DigestNum for GenericArray<u8, U64> {
 pub struct A2;
 impl client::UserPasswordHasher for A2 {
     type Out = [u8; 32];
+    fn hash_password(password: &[u8], salt: &[u8]) -> Self::Out {
+        const P: Params = match Params::new(4096, 1, 1, Some(32)) {
+            Ok(p) => p,
+            _ => panic!(),
+        };
+
+        let mut out = [0; 32];
+        Argon2::new(
+            argon2::Algorithm::Argon2d,
+            argon2::Version::V0x13,
+            P,
+        )
+        .hash_password_into(password, salt, &mut out)
+        .unwrap();
+        out
+    }
     fn hash_user_password(username: &[u8], password: &[u8], salt: &[u8]) -> Self::Out {
         const P: Params = match Params::new(4096, 1, 1, Some(32)) {
             Ok(p) => p,
