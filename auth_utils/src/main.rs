@@ -1,4 +1,5 @@
 use auth_common::{Data, RegisterReq};
+use base64::{Engine, prelude::BASE64_STANDARD};
 use blake2::Blake2b512;
 use clap::Parser;
 use rand::Rng;
@@ -18,31 +19,6 @@ struct Args {
 
 type Digest = Blake2b512;
 
-fn rand_num<const N: usize>() -> Uint<N> {
-    let mut buf = [0; N];
-    rand::thread_rng().fill(buf.as_mut_slice());
-    Uint::from_words(buf)
-}
-
-fn register(username: &str, password: &str) {
-    let salt: [u8; 32] = rand::random();
-    let verifier = SrpClient4096::<A2, Digest>::compute_verifier(
-        username.as_bytes(),
-        &password.as_bytes(),
-        &salt,
-    );
-
-    let mut buf = [0; 1024];
-
-    let encoded = RegisterReq {
-        salt: salt.into(),
-        verifier: verifier.to_le_bytes().into(),
-    }
-    .encode(&mut buf)
-    .unwrap();
-
-    println!("{}", base64::encode(&encoded));
-}
 
 fn register_with_username(username: &str, password: &str) {
     let salt: [u8; 32] = rand::random();
@@ -55,13 +31,14 @@ fn register_with_username(username: &str, password: &str) {
     let mut buf = [0; 1024];
 
     let encoded = RegisterReq {
+        username,
         salt: salt.into(),
         verifier: verifier.to_le_bytes().into(),
     }
     .encode(&mut buf)
     .unwrap();
 
-    println!("{}", base64::encode(&encoded));
+    println!("{}", BASE64_STANDARD.encode(&encoded));
 }
 
 fn main() {
@@ -70,5 +47,5 @@ fn main() {
         Some(pw) => pw,
         None => rpassword::prompt_password("Password: ").unwrap(),
     };
-    register(&args.user, &pass);
+    register_with_username(&args.user, &pass);
 }
